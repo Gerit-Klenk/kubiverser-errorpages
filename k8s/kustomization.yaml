@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: traefik
+
+resources:
+  - deployment.yaml
+  - service.yaml
+  - traefik-middleware.yaml
+
+# Wenn du direkt aus den Quell-HTML-Dateien ConfigMaps generieren möchtest:
+configMapGenerator:
+  - name: kubiverse-error-pages-html
+    files:
+      - 400.html=../src/400.html
+      - 401.html=../src/401.html
+      - 403.html=../src/403.html
+      - 404.html=../src/404.html
+      - 500.html=../src/500.html
+      - 502.html=../src/502.html
+      - 503.html=../src/503.html
+      - 504.html=../src/504.html
+      - index.html=../src/index.html
+      - css/style.css=../src/css/style.css
+      - assets/logo.svg=../src/assets/logo.svg
+      - assets/favicon.svg=../src/assets/favicon.svg

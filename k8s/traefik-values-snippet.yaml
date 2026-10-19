@@ -1,0 +1,41 @@
+# ==============================================================================
+# TRAEFIK HELM CHART - VALUES.YAML INTEGRATION
+# Füge diese Abschnitte in deine bestehende values.yaml für Traefik ein.
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# VARIANTE 1: Globale Middleware für alle eingehenden Anfragen (EMPFOHLEN)
+# Dadurch werden 404, 500, 502, 503 usw. für ALLE Ingresses automatisch
+# mit den Kubiverse-Fehlerseiten beantwortet.
+# ------------------------------------------------------------------------------
+
+# Schema für Traefik Helm Chart (v20+ / v25+ / v32+ / Traefik v2 & v3):
+ports:
+  web:
+    # Optional: HTTP zu HTTPS weiterleiten
+    redirectTo:
+      port: websecure
+  websecure:
+    # Syntax: <namespace>-<middleware-name>@kubernetescrd
+    # Wenn die Middleware im Namespace "traefik" liegt:
+    middlewares:
+      - traefik-kubiverse-error-pages@kubernetescrd
+
+# ------------------------------------------------------------------------------
+# VARIANTE 2: Über Traefik CLI-Argumente (falls 'ports.websecure.middlewares' nicht greift)
+# ------------------------------------------------------------------------------
+additionalArguments:
+  - "--entrypoints.websecure.http.middlewares=traefik-kubiverse-error-pages@kubernetescrd"
+  - "--entrypoints.web.http.middlewares=traefik-kubiverse-error-pages@kubernetescrd"
+
+# ------------------------------------------------------------------------------
+# HINWEIS ZU NAMESPACES & KUBERNETESCRD:
+# Das Format für Traefik Middleware-Referenzen lautet:
+#   <namespace>-<middlewareName>@kubernetescrd
+#
+# Liegt die Middleware 'kubiverse-error-pages' im Namespace 'traefik', heißt der Bezeichner:
+#   traefik-kubiverse-error-pages@kubernetescrd
+#
+# Liegt die Middleware im Namespace 'kube-system', hieße er:
+#   kube-system-kubiverse-error-pages@kubernetescrd
+# ------------------------------------------------------------------------------

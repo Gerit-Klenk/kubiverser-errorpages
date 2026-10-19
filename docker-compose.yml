@@ -1,0 +1,17 @@
+services:
+  kubiverse-error-pages:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kubiverse-error-pages:latest
+    container_name: kubiverse-error-pages
+    ports:
+      - "8085:8080"
+    volumes:
+      - ./src:/usr/share/nginx/html:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1:8080/healthz"]
+      interval: 10s
+      timeout: 3s
+      retries: 3

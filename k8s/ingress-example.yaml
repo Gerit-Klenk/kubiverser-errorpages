@@ -1,0 +1,54 @@
+# ==============================================================================
+# BEISPIEL-INGRESS KONFIGURATIONEN
+# Zeigt, wie die Middleware auf einzelne Ingress-Ressourcen angewendet werden kann.
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# BEISPIEL A: Traefik IngressRoute (Custom Resource Definition)
+# ------------------------------------------------------------------------------
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: sample-app-route
+  namespace: default
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`sample-app.kubiverse.local`)
+      kind: Rule
+      services:
+        - name: sample-app-service
+          port: 80
+      # Verknüpfung mit der Kubiverse Error Pages Middleware
+      middlewares:
+        - name: kubiverse-error-pages
+          namespace: traefik
+  tls:
+    secretName: sample-app-tls
+
+---
+# ------------------------------------------------------------------------------
+# BEISPIEL B: Standard Kubernetes Ingress (networking.k8s.io/v1)
+# ------------------------------------------------------------------------------
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: standard-app-ingress
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+    # Traefik Annotation zur Aktivierung der Middleware:
+    traefik.ingress.kubernetes.io/router.middlewares: traefik-kubiverse-error-pages@kubernetescrd
+spec:
+  rules:
+    - host: standard-app.kubiverse.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: standard-app-service
+                port:
+                  number: 80

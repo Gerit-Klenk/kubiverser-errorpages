@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none';" />
+  <title>502 - Bad Gateway | FMS-Kubiverse</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="bg-grid"></div>
+
+  <div class="layout-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-content">
+        <a href="/" class="brand" title="FMS-Kubiverse DevOps Portal">
+          <div class="brand-logo">K</div>
+          <div>
+            <h1 class="brand-title">FMS-Kubiverse</h1>
+            <p class="brand-subtitle">DevOps Portal</p>
+          </div>
+        </a>
+        <div class="gateway-badge">
+          <span class="pulse-dot" style="background-color: var(--status-danger);"></span>
+          <span>Traefik Ingress Gateway</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-wrapper">
+      <div class="error-card theme-5xx">
+        <div class="status-pill pill-502">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+          <span>HTTP 502 • Bad Gateway</span>
+        </div>
+
+        <div class="error-code">502</div>
+        <h2 class="error-title">Upstream-Service nicht erreichbar</h2>
+        <p class="error-description">
+          Der Traefik-Router konnte keine Verbindung zum Upstream-Pod herstellen.
+          Möglicherweise startet der Kubernetes-Pod gerade, die Readiness-Probe ist noch nicht positiv oder der Ziel-Container ist abgestürzt (CrashLoopBackOff).
+        </p>
+
+        <!-- Diagnostics Panel -->
+
+        <!-- Action Buttons -->
+        <div class="actions-group">
+          <button class="btn btn-primary" onclick="window.location.reload()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 4 23 10 17 10"></polyline>
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+            </svg>
+            <span>Erneut versuchen</span>
+          </button>
+          <button class="btn btn-secondary" onclick="window.history.back()">
+            <svg class="arrow-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Zurück</span>
+          </button>
+          <a href="/" class="btn btn-secondary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            <span>Zum Kubiverse Portal</span>
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-content">
+        <p>FMS-Kubiverse • Kubernetes-basierte Deployment-Plattform</p>
+        <div class="footer-links">
+          <a href="/" class="footer-link">Portal Home</a>
+          <a href="/docs" class="footer-link">Dokumentation</a>
+          <a href="/support" class="footer-link">DevOps Support</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (function() {
+      const pathElem = document.getElementById('diag-path');
+      if (pathElem) {
+        pathElem.textContent = window.location.pathname || '/';
+      }
+
+      const timeElem = document.getElementById('diag-time');
+      if (timeElem) {
+        timeElem.textContent = new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
+      }
+
+      const copyBtn = document.getElementById('copy-btn');
+      const cliCmd = document.getElementById('cli-cmd');
+      if (copyBtn && cliCmd) {
+        copyBtn.addEventListener('click', function() {
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(cliCmd.textContent || '');
+            copyBtn.setAttribute('title', 'Kopiert!');
+            setTimeout(function() {
+              copyBtn.setAttribute('title', 'Befehl kopieren');
+            }, 2000);
+          }
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

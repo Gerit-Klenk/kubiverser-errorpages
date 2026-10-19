@@ -1,0 +1,16 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs & temp
+*.log
+/tmp/
+
+# IDE & editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docker / local test overrides
+.env.local

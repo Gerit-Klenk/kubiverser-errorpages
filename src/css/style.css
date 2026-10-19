@@ -1,0 +1,654 @@
+/* ==========================================================================
+   FMS-Kubiverse Error Pages - Design System & Styles
+   Light Theme - Fully aligned with Kubiverse DevOps Portal
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* Kubiverse Portal Light Design Tokens (HSL based) */
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
+
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 35%;
+
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 222.2 84% 4.9%;
+
+  /* Direct Color Tokens */
+  --bg-page: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-card-subtle: #f8fafc;
+  
+  --border-subtle: #e2e8f0;
+  --border-card: #e2e8f0;
+  --border-focus: #6366f1;
+
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-dim: #64748b;
+
+  /* Primary Brand Gradients (from Kubiverse Portal) */
+  --gradient-primary: linear-gradient(135deg, hsl(230, 60%, 50%), hsl(270, 70%, 50%));
+  --gradient-hero: linear-gradient(135deg, hsl(230, 60%, 50%) 0%, hsl(270, 70%, 50%) 100%);
+  --gradient-card: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+
+  /* Error Display Gradients (Crisp & Readable in Light Mode) */
+  --gradient-text-4xx: linear-gradient(135deg, #3730a3 0%, #4f46e5 50%, #7c3aed 100%);
+  --gradient-text-5xx: linear-gradient(135deg, #9f1239 0%, #e11d48 50%, #f43f5e 100%);
+  --gradient-text-warning: linear-gradient(135deg, #92400e 0%, #d97706 50%, #f59e0b 100%);
+
+  /* Shadows (from Kubiverse Portal) */
+  --shadow-elegant: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
+  --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  --shadow-float: 0 20px 40px -15px rgba(15, 23, 42, 0.08), 0 0 0 1px var(--border-subtle);
+  --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.12);
+
+  /* Status Colors */
+  --status-info: #4f46e5;
+  --status-warning: #d97706;
+  --status-danger: #e11d48;
+  --status-success: #10b981;
+
+  /* Status Badges */
+  --badge-4xx-bg: #eef2ff;
+  --badge-4xx-border: #c7d2fe;
+  --badge-4xx-text: #4338ca;
+
+  --badge-5xx-bg: #fff1f2;
+  --badge-5xx-border: #fecdd3;
+  --badge-5xx-text: #e11d48;
+
+  --badge-warning-bg: #fffbeb;
+  --badge-warning-border: #fde68a;
+  --badge-warning-text: #b45309;
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace, Consolas;
+}
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  min-height: 100vh;
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Subtle Ambient Gradient & Clean Grid */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.08) 0%, rgba(168, 85, 247, 0.04) 30%, transparent 65%),
+    radial-gradient(circle at 85% 85%, rgba(56, 189, 248, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 15% 90%, rgba(168, 85, 247, 0.03) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  background-image: linear-gradient(to right, rgba(148, 163, 184, 0.12) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 1) 0%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 1) 0%, transparent 80%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Layout Wrapper */
+.layout-container {
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header - Aligned with Kubiverse Portal Header.tsx */
+.app-header {
+  border-bottom: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  text-decoration: none;
+}
+
+.brand-logo {
+  width: 2.5rem;
+  height: 2.5rem;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #ffffff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.brand:hover .brand-logo {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(168, 85, 247, 0.35);
+}
+
+.brand-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+}
+
+.brand-subtitle {
+  font-size: 0.8125rem;
+  color: var(--text-dim);
+}
+
+.gateway-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.875rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: #f1f5f9;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--status-warning);
+  position: relative;
+}
+
+.pulse-dot::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background-color: inherit;
+  opacity: 0.4;
+  animation: pulse 2s infinite ease-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+/* Main Content Area */
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+}
+
+/* Error Card - Pure White, Soft Shadow, Crisp Accent Bar */
+.error-card {
+  width: 100%;
+  max-width: 720px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-2xl);
+  padding: 3.25rem 2.5rem;
+  box-shadow: var(--shadow-float);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.error-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-primary);
+}
+
+/* Category Specific Top Accents & Display */
+.error-card.theme-4xx::before {
+  background: var(--gradient-primary);
+}
+.error-card.theme-4xx .error-code {
+  background: var(--gradient-text-4xx);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.error-card.theme-5xx::before {
+  background: linear-gradient(135deg, #e11d48, #f43f5e);
+}
+.error-card.theme-5xx .error-code {
+  background: var(--gradient-text-5xx);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.error-card.theme-503::before {
+  background: linear-gradient(135deg, #d97706, #f59e0b);
+}
+.error-card.theme-503 .error-code {
+  background: var(--gradient-text-warning);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Status Code Pill / Badge */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  transition: all 0.2s ease;
+}
+
+.status-pill svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.status-pill.pill-404, .status-pill.pill-400, .status-pill.pill-401, .status-pill.pill-403 {
+  background: var(--badge-4xx-bg);
+  border: 1px solid var(--badge-4xx-border);
+  color: var(--badge-4xx-text);
+}
+
+.status-pill.pill-502, .status-pill.pill-500 {
+  background: var(--badge-5xx-bg);
+  border: 1px solid var(--badge-5xx-border);
+  color: var(--badge-5xx-text);
+}
+
+.status-pill.pill-503, .status-pill.pill-504 {
+  background: var(--badge-warning-bg);
+  border: 1px solid var(--badge-warning-border);
+  color: var(--badge-warning-text);
+}
+
+/* Big Display Error Code */
+.error-code {
+  font-size: clamp(5.5rem, 16vw, 8.5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  background: var(--gradient-text-4xx);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.75rem;
+  user-select: none;
+}
+
+.error-title {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+
+.error-description {
+  font-size: 1.0625rem;
+  color: var(--text-muted);
+  max-width: 580px;
+  margin: 0 auto 2rem;
+  line-height: 1.7;
+}
+
+/* Diagnostics & Kubernetes Details Box */
+.diagnostics-panel {
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+  text-align: left;
+  font-size: 0.8125rem;
+}
+
+.diagnostics-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.diagnostics-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.diagnostics-title svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  color: #4f46e5;
+}
+
+.diagnostics-cluster-tag {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  background: #ffffff;
+  border: 1px solid var(--border-subtle);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.diagnostics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.875rem;
+  color: var(--text-muted);
+}
+
+.diagnostics-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.diagnostics-item .label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+}
+
+.diagnostics-item .val {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: var(--text-main);
+  word-break: break-all;
+}
+
+/* CLI Tip Box - Sleek High-Contrast Terminal */
+.cli-tip {
+  margin-top: 1rem;
+  padding: 0.625rem 0.875rem;
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: #c7d2fe;
+}
+
+.copy-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Action Buttons */
+.actions-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.875rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6875rem 1.375rem;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid transparent;
+}
+
+.btn svg {
+  width: 1rem;
+  height: 1rem;
+  transition: transform 0.2s ease;
+}
+
+/* Primary Button - Kubiverse Indigo/Violet Gradient */
+.btn-primary {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.35);
+}
+
+.btn-primary:hover svg {
+  transform: rotate(30deg);
+}
+
+/* Secondary Button - Pure White with Slate Border */
+.btn-secondary {
+  background: #ffffff;
+  color: var(--text-main);
+  border-color: var(--border-subtle);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.btn-secondary:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+}
+
+.btn-secondary:hover svg.arrow-back {
+  transform: translateX(-3px);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-dim);
+}
+
+.btn-ghost:hover {
+  color: var(--text-main);
+  background: #f1f5f9;
+}
+
+/* Footer - Aligned with Kubiverse Portal Footer.tsx */
+.app-footer {
+  border-top: 1px solid var(--border-subtle);
+  background: #ffffff;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--text-dim);
+}
+
+@media (min-width: 768px) {
+  .footer-content {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.footer-links {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.footer-link {
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+  color: var(--text-main);
+}
+
+/* Error Code Switcher Navigation (Used on index.html preview) */
+.preview-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  padding: 0.375rem;
+  background: #f1f5f9;
+  border: 1px solid var(--border-subtle);
+  border-radius: 9999px;
+}
+
+.nav-tab {
+  padding: 0.4rem 0.875rem;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-dim);
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-tab:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.nav-tab.active {
+  background: #ffffff;
+  color: var(--text-main);
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-subtle);
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .error-card {
+    padding: 2.25rem 1.25rem;
+  }
+  .error-code {
+    font-size: 4.75rem;
+  }
+  .diagnostics-grid {
+    grid-template-columns: 1fr;
+  }
+  .preview-nav {
+    border-radius: var(--radius-lg);
+  }
+  .nav-tab {
+    border-radius: var(--radius-md);
+  }
+}

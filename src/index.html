@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none';" />
+  <title>Kubiverse Error Pages | FMS-Kubiverse</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="bg-grid"></div>
+
+  <div class="layout-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-content">
+        <a href="/" class="brand" title="FMS-Kubiverse DevOps Portal">
+          <div class="brand-logo">K</div>
+          <div>
+            <h1 class="brand-title">FMS-Kubiverse</h1>
+            <p class="brand-subtitle">DevOps Portal • Error Gateway</p>
+          </div>
+        </a>
+        <div class="gateway-badge">
+          <span class="pulse-dot" id="header-pulse"></span>
+          <span>Traefik Ingress Gateway</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-wrapper" style="flex-direction: column;">
+      <!-- Interactive Preview Navigation Bar -->
+      <nav class="preview-nav" id="preview-nav" aria-label="Status Code Vorschau">
+        <button class="nav-tab" data-code="400">400 Bad Request</button>
+        <button class="nav-tab" data-code="401">401 Unauthorized</button>
+        <button class="nav-tab" data-code="403">403 Forbidden</button>
+        <button class="nav-tab active" data-code="404">404 Not Found</button>
+        <button class="nav-tab" data-code="500">500 Server Error</button>
+        <button class="nav-tab" data-code="502">502 Bad Gateway</button>
+        <button class="nav-tab" data-code="503">503 Unavailable</button>
+        <button class="nav-tab" data-code="504">504 Timeout</button>
+      </nav>
+
+      <!-- Active Error Card Container -->
+      <div class="error-card theme-4xx" id="main-card">
+        <div class="status-pill pill-404" id="card-pill">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="card-icon">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            <line x1="11" y1="8" x2="11" y2="8.01"></line>
+            <line x1="11" y1="12" x2="11" y2="15"></line>
+          </svg>
+          <span id="card-pill-text">HTTP 404 • Not Found</span>
+        </div>
+
+        <div class="error-code" id="card-code">404</div>
+        <h2 class="error-title" id="card-title">Seite oder Deployment nicht gefunden</h2>
+        <p class="error-description" id="card-desc">
+          Die angeforderte Route oder Anwendung konnte im Kubernetes-Cluster nicht gefunden werden.
+          Möglicherweise ist die URL fehlerhaft, das Deployment wurde beendet oder die Ingress-Route ist noch nicht aktiv.
+        </p>
+
+
+        <!-- Action Buttons -->
+        <div class="actions-group">
+          <a href="/" class="btn btn-primary" id="btn-primary-action">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            <span id="btn-action-label">Zum Kubiverse Portal</span>
+          </a>
+          <button class="btn btn-secondary" onclick="window.history.back()">
+            <svg class="arrow-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Zurück</span>
+          </button>
+          <button class="btn btn-secondary" onclick="window.location.reload()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 4 23 10 17 10"></polyline>
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+            </svg>
+            <span>Erneut versuchen</span>
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-content">
+        <p>FMS-Kubiverse • Kubernetes-basierte Deployment-Plattform</p>
+        <div class="footer-links">
+          <a href="/" class="footer-link">Portal Home</a>
+          <a href="/docs" class="footer-link">Dokumentation</a>
+          <a href="/support" class="footer-link">DevOps Support</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (function() {
+      // Error data dictionary
+      const ERROR_DATA = {
+        '400': {
+          pill: 'HTTP 400 • Bad Request',
+          pillClass: 'pill-404',
+          themeClass: 'theme-4xx',
+          title: 'Ungültige Anfrage',
+          desc: 'Die vom Client gesendete HTTP-Anfrage ist fehlerhaft aufgebaut oder enthält ungültige Header/Parameter, die vom Gateway nicht verarbeitet werden können.',
+          detail: '400 Malformed Request Header/Body',
+          cmd: 'kubectl logs -l app.kubernetes.io/name=traefik -n traefik --tail=30',
+          pulseColor: 'var(--status-warning)'
+        },
+        '401': {
+          pill: 'HTTP 401 • Unauthorized',
+          pillClass: 'pill-404',
+          themeClass: 'theme-4xx',
+          title: 'Authentifizierung erforderlich',
+          desc: 'Für den Zugriff auf diesen internen Service sind gültige Anmeldeinformationen (Token, Basic Auth oder SSO-Sitzung) erforderlich.',
+          detail: 'Missing or Invalid Credentials',
+          cmd: 'kubectl get secrets -n traefik',
+          pulseColor: 'var(--status-warning)'
+        },
+        '403': {
+          pill: 'HTTP 403 • Forbidden',
+          pillClass: 'pill-404',
+          themeClass: 'theme-4xx',
+          title: 'Zugriff verweigert',
+          desc: 'Du besitzt nicht die erforderlichen Berechtigungen oder Rollen (RBAC), um auf diese Cluster-Ressource oder diesen Namespace zuzugreifen.',
+          detail: '403 Access Restricted / Forbidden',
+          cmd: 'kubectl auth can-i get pods',
+          pulseColor: 'var(--status-danger)'
+        },
+        '404': {
+          pill: 'HTTP 404 • Not Found',
+          pillClass: 'pill-404',
+          themeClass: 'theme-4xx',
+          title: 'Seite oder Deployment nicht gefunden',
+          desc: 'Die angeforderte Route oder Anwendung konnte im Kubernetes-Cluster nicht gefunden werden. Möglicherweise ist die URL fehlerhaft oder das Deployment wurde beendet.',
+          detail: '404 Router Match Miss',
+          cmd: 'kubectl get ingress,ingressroutes -A',
+          pulseColor: 'var(--status-warning)'
+        },
+        '500': {
+          pill: 'HTTP 500 • Internal Server Error',
+          pillClass: 'pill-500',
+          themeClass: 'theme-5xx',
+          title: 'Interner Serverfehler',
+          desc: 'Die Backend-Anwendung hat einen unerwarteten Fehler zurückgegeben und konnte die Anfrage nicht verarbeiten. Prüfe die Logs des Anwendungs-Containers.',
+          detail: 'Application Exception / 500',
+          cmd: 'kubectl logs -l app.kubernetes.io/name=<app> --tail=50',
+          pulseColor: 'var(--status-danger)'
+        },
+        '502': {
+          pill: 'HTTP 502 • Bad Gateway',
+          pillClass: 'pill-502',
+          themeClass: 'theme-5xx',
+          title: 'Upstream-Service nicht erreichbar',
+          desc: 'Der Traefik-Router konnte keine Verbindung zum Upstream-Pod herstellen. Möglicherweise startet der Container noch oder die Readiness-Probe schlägt fehl.',
+          detail: 'Connection Refused / No Endpoint Available',
+          cmd: 'kubectl get pods,endpoints -l app.kubernetes.io/name=<app>',
+          pulseColor: 'var(--status-danger)'
+        },
+        '503': {
+          pill: 'HTTP 503 • Service Unavailable',
+          pillClass: 'pill-503',
+          themeClass: 'theme-503',
+          title: 'Dienst vorübergehend nicht verfügbar',
+          desc: 'Die Kubernetes-Arbeitslast wird gerade aktualisiert, skaliert oder befindet sich in einem kurzen Wartungsfenster. Bitte versuche es gleich erneut.',
+          detail: 'Cluster Maintenance / Upstream Pods Unavailable',
+          cmd: 'kubectl rollout status deployment/<app>',
+          pulseColor: 'var(--status-warning)'
+        },
+        '504': {
+          pill: 'HTTP 504 • Gateway Timeout',
+          pillClass: 'pill-504',
+          themeClass: 'theme-503',
+          title: 'Gateway-Zeitüberschreitung (Timeout)',
+          desc: 'Der Ingress-Gateway hat keine rechtzeitige Antwort vom Upstream-Pod erhalten. Möglicherweise ist die Anwendung überlastet oder blockiert.',
+          detail: 'Upstream Pod Response Timeout (>30s)',
+          cmd: 'kubectl top pods -l app.kubernetes.io/name=<app>',
+          pulseColor: 'var(--status-warning)'
+        }
+      };
+
+      // Set timestamp and path safely
+      const pathElem = document.getElementById('diag-path');
+      if (pathElem) pathElem.textContent = window.location.pathname || '/';
+
+      const timeElem = document.getElementById('diag-time');
+      if (timeElem) timeElem.textContent = new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
+
+      // Switch error code display
+      function setErrorCode(code) {
+        const data = ERROR_DATA[code] || ERROR_DATA['404'];
+        
+        const cardElem = document.getElementById('main-card');
+        const pillElem = document.getElementById('card-pill');
+        const pillText = document.getElementById('card-pill-text');
+        const codeElem = document.getElementById('card-code');
+        const titleElem = document.getElementById('card-title');
+        const descElem = document.getElementById('card-desc');
+        const pulseElem = document.getElementById('header-pulse');
+
+        if (cardElem) {
+          cardElem.className = 'error-card ' + data.themeClass;
+        }
+        if (pillElem) {
+          pillElem.className = 'status-pill ' + data.pillClass;
+        }
+        if (pillText) pillText.textContent = data.pill;
+        if (codeElem) codeElem.textContent = code;
+        if (titleElem) titleElem.textContent = data.title;
+        if (descElem) descElem.textContent = data.desc;
+        if (pulseElem) pulseElem.style.backgroundColor = data.pulseColor;
+
+        // Update active tab in nav
+        const tabs = document.querySelectorAll('.nav-tab');
+        tabs.forEach(tab => {
+          if (tab.getAttribute('data-code') === code) {
+            tab.classList.add('active');
+          } else {
+            tab.classList.remove('active');
+          }
+        });
+
+        document.title = code + ' - ' + data.title + ' | FMS-Kubiverse';
+      }
+
+      // Read query parameter '?code=XXX'
+      const urlParams = new URLSearchParams(window.location.search);
+      const reqCode = urlParams.get('code');
+      if (reqCode && ERROR_DATA[reqCode]) {
+        setErrorCode(reqCode);
+      } else {
+        setErrorCode('404');
+      }
+
+      // Add click handlers for preview buttons
+      const tabs = document.querySelectorAll('.nav-tab');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          const code = this.getAttribute('data-code');
+          if (code) {
+            setErrorCode(code);
+            // Update URL without reloading
+            if (window.history.pushState) {
+              const newUrl = window.location.pathname + '?code=' + code;
+              window.history.pushState({ path: newUrl }, '', newUrl);
+            }
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

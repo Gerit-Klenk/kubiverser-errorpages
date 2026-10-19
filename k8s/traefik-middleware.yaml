@@ -1,0 +1,20 @@
+# Traefik Error Pages Middleware
+# Kompatibel mit Traefik v2 und Traefik v3
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: kubiverse-error-pages
+  namespace: traefik
+  labels:
+    app.kubernetes.io/name: kubiverse-error-pages
+spec:
+  errors:
+    # Fängt alle HTTP-Fehlercodes von 400 bis 599 ab (z. B. 404, 500, 502, 503, 504)
+    status:
+      - "400-599"
+    # Verweist auf den ClusterIP Service im selben Namespace
+    service:
+      name: kubiverse-error-pages
+      port: 80
+    # Traefik ersetzt {status} dynamisch mit dem HTTP Statuscode (z. B. /404.html)
+    query: "/{status}.html"
